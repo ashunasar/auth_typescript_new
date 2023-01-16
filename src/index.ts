@@ -22,9 +22,10 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
 });
 
 app.use(async (err: any, req: Request, res: Response, next: NextFunction) => {
+  res.status(err.statusCode || 500);
   res.send({
     error: {
-      statusCode: err.statusCode,
+      statusCode: err.statusCode || 500,
       message: err.message,
     },
   });
