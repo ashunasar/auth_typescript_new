@@ -1,5 +1,4 @@
 import * as dotenv from "dotenv";
-import Connection from "./helpers/init_mongodb";
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import createError from "http-errors";
@@ -8,7 +7,7 @@ import AuthRouter from "./routes/auth.route";
 const app = express();
 
 dotenv.config();
-new Connection().start();
+require("./helpers/init_mongodb");
 app.use(morgan("dev"));
 const PORT = process.env.PORT || 3000;
 
