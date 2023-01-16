@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 const router = express.Router();
 
 router.post("/register", (req: Request, res: Response, next: NextFunction) => {
+  console.log(req.body);
   res.send("Hello from register route");
 });
 

@@ -11,6 +11,7 @@ require("./helpers/init_mongodb");
 app.use(morgan("dev"));
 const PORT = process.env.PORT || 3000;
 
+app.use(express.json());
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello world");
 });
