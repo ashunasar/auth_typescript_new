@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
 import User from "../models/user.model";
 import authSchema from "../validation/auth_schema";
+import { signAccessToken } from "../helpers/jwt_helper";
 const router = express.Router();
 
 router.post(
@@ -16,6 +17,8 @@ router.post(
         );
       const user = new User(result);
       const savedUser = await user.save();
+      const accessToken = await signAccessToken(savedUser.id);
+      console.log(accessToken);
       res.send(savedUser);
     } catch (err: any) {
       if (err.isJoi) err.statusCode = 422;
