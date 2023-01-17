@@ -4,6 +4,7 @@ import morgan from "morgan";
 import createError from "http-errors";
 import { request } from "http";
 import AuthRouter from "./routes/auth.route";
+import { verifyAccessToken } from "./helpers/jwt_helper";
 const app = express();
 
 dotenv.config();
@@ -12,9 +13,13 @@ app.use(morgan("dev"));
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello world");
-});
+app.get(
+  "/",
+  verifyAccessToken,
+  async (req: Request, res: Response, next: NextFunction) => {
+    res.send("Hello world");
+  }
+);
 app.use("/auth", AuthRouter);
 
 app.use(async (req: Request, res: Response, next: NextFunction) => {
