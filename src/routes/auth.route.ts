@@ -3,7 +3,6 @@ import createError from "http-errors";
 import User from "../models/user.model";
 import authSchema from "../validation/auth_schema";
 import { signAccessToken } from "../helpers/jwt_helper";
-import { SignatureKind } from "typescript";
 const router = express.Router();
 
 router.post(
