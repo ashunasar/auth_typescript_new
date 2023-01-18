@@ -70,4 +70,25 @@ const signRefreshToken = (userId: string) => {
   });
 };
 
+const verifyRefreshToken = (refreshToken: string) =>
+  new Promise((resolve, reject) => {
+    const secretKey: string = process.env.REFRESH_TOKEN_SECRET!;
+    Jwt.verify(
+      refreshToken!,
+      secretKey,
+      (
+        err: VerifyErrors | null,
+        payload: string | JwtPayload | undefined
+      ): void => {
+        if (err) {
+          if (err instanceof TokenExpiredError) {
+            return reject(createError.Unauthorized(err.message));
+          }
+          return reject(createError.Unauthorized());
+        }
+        const data = payload as JwtPayload;
+        resolve(data.aud);
+      }
+    );
+  });
 export { signAccessToken, verifyAccessToken, signRefreshToken };
