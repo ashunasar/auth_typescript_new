@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
 import User from "../models/user.model";
 import authSchema from "../validation/auth_schema";
-import { signAccessToken } from "../helpers/jwt_helper";
+import { signAccessToken, signRefreshToken } from "../helpers/jwt_helper";
 const router = express.Router();
 
 router.post(
@@ -19,8 +19,8 @@ router.post(
 
       const savedUser = await user.save();
       const accessToken = await signAccessToken(savedUser.id);
-      console.log(accessToken);
-      res.send(savedUser);
+      const refreshToken = await signRefreshToken(savedUser.id);
+      res.send({ accessToken, refreshToken });
     } catch (err: any) {
       if (err.isJoi) err.statusCode = 422;
       next(err);
@@ -39,7 +39,8 @@ router.post(
 
       if (!isMatch) throw createError.Unauthorized("email/password not valid");
       const accessToken = await signAccessToken(user.id);
-      res.send({ accessToken });
+      const refreshToken = await signRefreshToken(user.id);
+      res.send({ accessToken, refreshToken });
     } catch (err: any) {
       if (err.isJoi)
         return next(createError.BadRequest("Invalid email/password"));

@@ -13,7 +13,7 @@ const signAccessToken = (userId: string) => {
     const payload: JwtPayload = { aud: userId, iss: "asim.com" };
     const secretKey: string = process.env.ACCESS_TOKEN_SECRET!;
     const options: SignOptions = {
-      expiresIn: "1h",
+      expiresIn: "30s",
     };
 
     Jwt.sign(payload, secretKey, options, (err, token) => {
