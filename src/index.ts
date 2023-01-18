@@ -9,6 +9,7 @@ const app = express();
 
 dotenv.config();
 require("./helpers/init_mongodb");
+require("./helpers/init_redis");
 app.use(morgan("dev"));
 const PORT = process.env.PORT || 3000;
 
