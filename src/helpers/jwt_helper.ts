@@ -71,7 +71,7 @@ const signRefreshToken = (userId: string) => {
 };
 
 const verifyRefreshToken = (refreshToken: string) =>
-  new Promise((resolve, reject) => {
+  new Promise<string>((resolve, reject) => {
     const secretKey: string = process.env.REFRESH_TOKEN_SECRET!;
     Jwt.verify(
       refreshToken!,
@@ -87,8 +87,13 @@ const verifyRefreshToken = (refreshToken: string) =>
           return reject(createError.Unauthorized());
         }
         const data = payload as JwtPayload;
-        resolve(data.aud);
+        return resolve(data.aud as string);
       }
     );
   });
-export { signAccessToken, verifyAccessToken, signRefreshToken };
+export {
+  signAccessToken,
+  verifyAccessToken,
+  signRefreshToken,
+  verifyRefreshToken,
+};

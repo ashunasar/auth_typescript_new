@@ -2,7 +2,11 @@ import express, { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
 import User from "../models/user.model";
 import authSchema from "../validation/auth_schema";
-import { signAccessToken, signRefreshToken } from "../helpers/jwt_helper";
+import {
+  signAccessToken,
+  signRefreshToken,
+  verifyRefreshToken,
+} from "../helpers/jwt_helper";
 const router = express.Router();
 
 router.post(
@@ -51,7 +55,12 @@ router.post(
 router.post(
   "/refresh-token",
   async (req: Request, res: Response, next: NextFunction) => {
-    res.send("Hello from refresh-token route");
+    try {
+      const { refreshToken } = req.body;
+      const userId: string = await verifyRefreshToken(refreshToken);
+    } catch (error) {
+      next(error);
+    }
   }
 );
 router.delete(
