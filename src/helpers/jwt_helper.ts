@@ -4,7 +4,7 @@ import Jwt, {
   TokenExpiredError,
   VerifyErrors,
 } from "jsonwebtoken";
-import { token } from "morgan";
+import client from "./init_redis";
 import createError from "http-errors";
 import { Request, Response, NextFunction } from "express";
 
@@ -65,6 +65,9 @@ const signRefreshToken = (userId: string) => {
         console.log(err);
         reject(createError.InternalServerError());
       }
+      client.set(userId, token!, {
+        EX: 24 * 30 * 12 * 60 * 60,
+      });
       resolve(token);
     });
   });
@@ -76,10 +79,10 @@ const verifyRefreshToken = (refreshToken: string) =>
     Jwt.verify(
       refreshToken!,
       secretKey,
-      (
+      async (
         err: VerifyErrors | null,
         payload: string | JwtPayload | undefined
-      ): void => {
+      ) => {
         if (err) {
           if (err instanceof TokenExpiredError) {
             return reject(createError.Unauthorized(err.message));
@@ -87,7 +90,17 @@ const verifyRefreshToken = (refreshToken: string) =>
           return reject(createError.Unauthorized());
         }
         const data = payload as JwtPayload;
-        return resolve(data.aud as string);
+        const userId: string = data.aud as string;
+
+        let redisToken: string | null = await client.get(userId);
+        if (redisToken === null) {
+          return reject(createError.Unauthorized());
+        }
+        if (redisToken == refreshToken) {
+          return resolve(userId);
+        } else {
+          return reject(createError.Unauthorized());
+        }
       }
     );
   });

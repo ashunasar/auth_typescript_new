@@ -5,6 +5,7 @@ import createError from "http-errors";
 import { request } from "http";
 import AuthRouter from "./routes/auth.route";
 import { verifyAccessToken } from "./helpers/jwt_helper";
+import client from "./helpers/init_redis";
 const app = express();
 
 dotenv.config();
@@ -13,7 +14,12 @@ require("./helpers/init_redis");
 app.use(morgan("dev"));
 const PORT = process.env.PORT || 3000;
 
+async function startRedis() {
+  await client.connect();
+}
+startRedis();
 app.use(express.json());
+
 app.get(
   "/",
   verifyAccessToken,
