@@ -17,6 +17,7 @@ app.get(
   "/",
   verifyAccessToken,
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.body.payload);
     res.send("Hello world");
   }
 );

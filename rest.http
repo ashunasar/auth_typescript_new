@@ -1,4 +1,5 @@
 GET http://localhost:3000
+Authorization: Baerer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiI2M2M1MGVhZjM5OTFmNDNmNzYyMGRkNmMiLCJpc3MiOiJhc2ltLmNvbSIsImlhdCI6MTY3Mzk0NjcwOSwiZXhwIjoxNjczOTUwMzA5fQ.1KbIpEoRQ0psbPmkb5udUvNOCuOjEbWc8ERagZRog2c
 
 
 ###
