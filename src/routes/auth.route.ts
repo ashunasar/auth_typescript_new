@@ -58,6 +58,10 @@ router.post(
     try {
       const { refreshToken } = req.body;
       const userId: string = await verifyRefreshToken(refreshToken);
+
+      const accessToken = await signAccessToken(userId);
+      const refToken = await signRefreshToken(userId);
+      res.send({ accessToken, refreshToken: refToken });
     } catch (error) {
       next(error);
     }
