@@ -70,7 +70,11 @@ router.post(
 router.delete(
   "/logout",
   async (req: Request, res: Response, next: NextFunction) => {
-    res.send("Hello from logout route");
+    //TODO: handle logoout route
+    try {
+    } catch (error) {
+      next(error);
+    }
   }
 );
 export default router;
