@@ -72,6 +72,7 @@ router.delete(
   async (req: Request, res: Response, next: NextFunction) => {
     //TODO: handle logoout route
     try {
+      //some fixes
     } catch (error) {
       next(error);
     }
